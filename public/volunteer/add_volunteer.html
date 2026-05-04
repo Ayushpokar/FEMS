@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <pre>
+        <form>
+            Enter Register Number: <input type="text" name="register" id="register_no">
+            Enter Name: <input type="text" name="name" id="name">
+            Enter email: <input type="email" name="email" id="email">
+            Enter Mobile: <input type="text" name="mobile" id="mobile">
+            Enter Department: <input type="text" name="depatment" id="depatment">
+            <input type="button" value="Add" onclick="addvolunteer();">
+        </form>
+    </pre>
+    <script>
+        async function addvolunteer() {
+            const payload = {
+                "register_number": document.getElementById('register_no').value,
+                "name": document.getElementById('name').value,
+                "email": document.getElementById('email').value,
+                "mobile": document.getElementById('mobile').value,
+                "department": document.getElementById('depatment').value
+            }
+            const res = await fetch('/addvolunteer',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            const response = await res.json();
+            console.log(response);
+        }
+    </script>
+</body>
+</html>

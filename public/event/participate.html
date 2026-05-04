@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <pre>
+        <form action="" method="post">
+            Name: <input type="text" id="name">
+            Email: <input type="email" name="" id="email">
+            Mobile: <input type="text" name="" id="mobile">
+            Employment Status: <input type="text" name="" id="status">
+            Organisation Name: <input type="text" id="organisation">
+            Current City: <input type="text" id="city">
+            <input type="button" value="Submit" onclick="participate();">
+        </form>
+    </pre>
+
+    <script>
+        async function participate() {
+            const payload = {
+            "name": document.getElementById('name').value,
+            "email": document.getElementById('email').value,
+            "mobile": document.getElementById('mobile').value,
+            "employment_status": document.getElementById('status').value,
+            "organisation_name": document.getElementById('organisation').value,
+            "city": document.getElementById('city').value
+        }
+        const res = await fetch('/registration',{
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+        const result = res.json();  
+        }
+
+    </script>
+</body>
+</html>

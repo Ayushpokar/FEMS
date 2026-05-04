@@ -1,0 +1,23 @@
+import express from 'express';
+import { Router } from 'express';
+import {register} from '../controllers/faculty/Controller.js';
+import { createguest, get_guest_details} from '../controllers/guest/Controller.js';
+import { participate} from '../controllers/participate/Controller.js';
+import {createevent,get_events_details ,getevent,updateevent, deleteevent} from '../controllers/event/Controller.js';
+import { addvolunteer, getvolunteer ,creategroup, getvolunteer_group} from '../controllers/volunteer/Controller.js';
+const router = Router();
+
+router.route('/register').post(register);
+router.route('/guest').post(createguest);
+router.route('/registration').post(participate);
+router.route('/get_guest_details').get(get_guest_details);
+router.route('/createevent').post(createevent);
+router.route('/eventdetails').get(get_events_details);
+router.route('/addvolunteer').post(addvolunteer);
+router.route('/getvolunteer').get(getvolunteer);
+router.route('/creategroup').post(creategroup);
+router.route('/getvolunteer_group').get(getvolunteer_group);    
+router.route('/getevent/:id').get(getevent);
+router.route('/updateevent/:id').put(updateevent);
+router.route('/deleteevent/:id').delete(deleteevent);
+export default router;

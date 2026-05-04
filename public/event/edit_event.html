@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Event</title>
+</head>
+
+<body>
+    <pre>
+   <form>
+            Event name: <input type="text" name="" id="name" required>
+            Event Descrption: <input type="text" name="" id="descrp" required>
+            Event Venue: <input type="text" name="" id="venue" required>
+            Event category: <input type="text" name="" id="category" required>
+            Event Mode: Online<input type="radio" name="mode" id="mode" value="online" required> Offline<input type="radio" name="mode" id="mode" value="offline" required>
+            Event registration fee: <input type="number" name="" id="fee">
+            Event Start Time: <input type="datetime-local" name="" id="starttime" required>
+            Event End Time: <input type="datetime-local" name="" id="endtime" required>
+            Event Total Cost: <input type="number" name="" id="totalcost">
+            Audience Size: <input type="number" name="" id="size">
+            Select Guest: <select id="guest" required></select> 
+            Select Group: <select id="group" required></select>
+            <input type="button" value="Modify" onclick="editevent();">
+        </form>
+    </pre>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const res = await fetch(`/getevent/${id}`);
+                const payload = (await res.json());
+                const data = payload.values[0];
+                function formatLocal(dateString) {
+                    const date = new Date(dateString);
+                    const offset = date.getTimezoneOffset();
+                    const local = new Date(date.getTime() - offset * 60000);
+                    return local.toISOString().slice(0, 16);
+                }
+
+                document.getElementById('name').value = data.name;
+                document.getElementById('descrp').value = data.descrp;
+                document.getElementById('venue').value = data.venue;
+                document.getElementById('category').value = data.category;
+
+                const radio = document.querySelector(`input[name="mode"][value="${data.mode_of_event}"]`);
+                if (radio) radio.checked = true;
+
+                document.getElementById('fee').value = data.registration_fee;
+                document.getElementById('starttime').value = formatLocal(data.start_date);
+                document.getElementById('endtime').value = formatLocal(data.end_date);
+                document.getElementById('totalcost').value = data.total_cost;
+                document.getElementById('size').value = data.audience_size;
+                document.getElementById('guest').innerHTML+= `<option value=${data.guest_id}>${data.guest_name}</option>`;
+                document.getElementById('group').innerHTML+= `<option value=${data.group_id}>${data.group_name}</option>`;
+
+                payload.guests.forEach(guest_name => {
+                document.getElementById('guest').innerHTML+= `<option value=${guest_name.id}>${guest_name.name}</option>`;
+                });
+                
+                payload.groups.forEach(group_name => {
+                document.getElementById('group').innerHTML+=`<option value=${group_name.id}>${group_name.name}</option>`;
+                });
+            } catch (err) {
+                console.error("Error fetching event:", err);
+            }
+        });
+        async function editevent() {
+            const payload = {
+                "event_name": document.getElementById('name').value,
+                "event_descrption": document.getElementById('descrp').value,
+                "event_venue":document.getElementById('venue').value,
+                "event_category":document.getElementById('category').value,
+                "event_mode":document.querySelector('input[name="mode"]:checked').value,
+                "event_fee":document.getElementById('fee').value,
+                "event_start_time":document.getElementById('starttime').value,
+                "event_end_time": document.getElementById('endtime').value,
+                "total_cost": document.getElementById('totalcost').value,
+                "audience_size": document.getElementById('size').value,
+                "guest_id": document.getElementById('guest').value,
+                "group_id": document.getElementById('group').value
+            }
+            const res = await fetch(`/updateevent/${id}`,{
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            });
+            const responce = await res.json();
+            alert(responce.message);
+            window.location.href = '/allevents';
+        }
+    </script>
+</body>
+
+</html>

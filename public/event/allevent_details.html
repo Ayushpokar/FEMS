@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All event</title>
+</head>
+<body border="2px">
+        <table border="2px">
+            <tr>
+                <th>Event Name</th>
+                <th>Event Descrption</th>
+                <th>Event Start Time</th>
+                <th>Event End Time</th>
+                <th>Event Venue</th>
+                <th>Event Guest</th>
+                <th>Volunteer Group</th>
+                <th>Current Status</th>
+                <th>Action</th>
+                <tbody id="table"></tbody>
+            </tr>
+        </table>
+
+    <script>
+        const table = document.getElementById('table');
+        async function eventdetails() {
+            const res = await fetch('/eventdetails',{method:'GET'});
+            const responce = await res.json();
+                 responce.forEach(event => {
+            table.innerHTML += `
+        <tr>
+            <td>${event.event_name}</td>
+            <td>${event.descrp}</td>
+            <td>${new Date(event.start_date).toLocaleString('en-IN', { 
+                    dateStyle: 'medium', 
+                    timeStyle: 'short' 
+                })}</td>
+            <td>${new Date(event.end_date).toLocaleString('en-IN', { 
+                    dateStyle: 'medium', 
+                    timeStyle: 'short' 
+                })}</td>
+            <td>${event.venue}</td>
+            <td>${event.guest_name}</td>
+            <td>${event.group_name}</td>
+            <td>${event.status}</td>
+            <td>
+            <button><a href="/edit-event?id=${event.event_id}">Modify</a></button> /
+            <button onclick=deleteevent(${event.event_id})>Delete</a></button>
+            </td>
+        </tr>`;
+                });
+            }
+            eventdetails();
+            async function deleteevent(event_id) {
+                const res = await fetch(`/deleteevent/${event_id}`,{method: 'DELETE'});
+                const responce = await res.json();
+                alert(responce.message);
+                window.location.reload();
+                // wind
+            }
+    </script>
+</body>
+</html>

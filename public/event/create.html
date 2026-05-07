@@ -18,9 +18,9 @@
             Event End Time: <input type="datetime-local" name="" id="endtime">
             Event Total Cost: <input type="number" name="" id="totalcost">
             Audience Size: <input type="number" name="" id="size">
-            Select Guest: <select name="" id="guest"></select>    <button><a href="/createguest">Create New Guest</a></button>
+            Select Guest: <select name="" id="guest"></select>    <button><a href="/create/createguest">Create New Guest</a></button>
 
-            Select Group: <select name="" id="group"></select>    <button><a href="/volunteergroup">Create New Volunteer Group</a></button>
+            Select Group: <select name="" id="group"></select>   <a href="/create/volunteergroup">Create Group</a>
             <input type="button" value="createevent" onclick="createevent();">
         </form>
     </pre>
@@ -71,7 +71,7 @@
             });
             const responce = await res.json();
             alert(responce.message);
-            window.location.href = '/allevents'
+            window.location.href = '/events';
         }
     </script>
 </body>

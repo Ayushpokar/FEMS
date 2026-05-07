@@ -22,7 +22,12 @@
             Audience Size: <input type="number" name="" id="size">
             Select Guest: <select id="guest" required></select> 
             Select Group: <select id="group" required></select>
+            Comment: <textarea name="" id="comment"></textarea>
             <input type="button" value="Modify" onclick="editevent();">
+            <input type="button" value="Approve event" onclick="updatestatus('approved');">
+            <input type="button" value="Request for modification" onclick="updatestatus('Changes Requested');">
+            <input type="button" value="Reject event" onclick="updatestatus('rejected');">
+           
         </form>
     </pre>
     <script>
@@ -33,6 +38,8 @@
                 const res = await fetch(`/getevent/${id}`);
                 const payload = (await res.json());
                 const data = payload.values[0];
+                console.log(data.guest_id)
+
                 function formatLocal(dateString) {
                     const date = new Date(dateString);
                     const offset = date.getTimezoneOffset();
@@ -53,15 +60,13 @@
                 document.getElementById('endtime').value = formatLocal(data.end_date);
                 document.getElementById('totalcost').value = data.total_cost;
                 document.getElementById('size').value = data.audience_size;
-                document.getElementById('guest').innerHTML+= `<option value=${data.guest_id}>${data.guest_name}</option>`;
-                document.getElementById('group').innerHTML+= `<option value=${data.group_id}>${data.group_name}</option>`;
 
                 payload.guests.forEach(guest_name => {
-                document.getElementById('guest').innerHTML+= `<option value=${guest_name.id}>${guest_name.name}</option>`;
+                document.getElementById('guest').innerHTML+= `<option value=${guest_name.id} ${data.guest_id === guest_name.id?'Selected': " "}>${guest_name.name}</option>`;
                 });
                 
                 payload.groups.forEach(group_name => {
-                document.getElementById('group').innerHTML+=`<option value=${group_name.id}>${group_name.name}</option>`;
+                document.getElementById('group').innerHTML+=`<option value=${group_name.id} ${data.group_id === group_name.id?'Selected': ""}>${group_name.name}</option>`;
                 });
             } catch (err) {
                 console.error("Error fetching event:", err);
@@ -80,7 +85,7 @@
                 "total_cost": document.getElementById('totalcost').value,
                 "audience_size": document.getElementById('size').value,
                 "guest_id": document.getElementById('guest').value,
-                "group_id": document.getElementById('group').value
+                "group_id": document.getElementById('group').value,
             }
             const res = await fetch(`/updateevent/${id}`,{
                 method: 'PUT',
@@ -89,7 +94,22 @@
             });
             const responce = await res.json();
             alert(responce.message);
-            window.location.href = '/allevents';
+            updatestatus('modified');
+            window.location.href = '/events';
+            
+        }
+
+        async function updatestatus(status) {
+            console.log(status);
+            const payload = {"comment":document.getElementById('comment').value};
+            const res = await fetch(`/updatestatus/${id}/${status}`,{
+                method:'PATCH',
+                headers:{'Content-Type':'application/json'},
+                body: JSON.stringify(payload)
+            });
+            const responce = await res.json();
+            alert(responce.message);
+            window.location.href = '/events';
         }
     </script>
 </body>

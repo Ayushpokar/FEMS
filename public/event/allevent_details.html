@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All event</title>
 </head>
-<body border="2px">
+<body>
+    <h3>All Events</h3>
         <table border="2px">
             <tr>
                 <th>Event Name</th>
@@ -43,10 +44,13 @@
             <td>${event.guest_name}</td>
             <td>${event.group_name}</td>
             <td>${event.status}</td>
-            <td>
+            ${(event.status== 'approved' || event.status == 'rejected')?
+                `<td>Event is ${event.status}</td>`:
+            
+            `<td>
             <button><a href="/edit-event?id=${event.event_id}">Modify</a></button> /
             <button onclick=deleteevent(${event.event_id})>Delete</a></button>
-            </td>
+            </td>`}
         </tr>`;
                 });
             }

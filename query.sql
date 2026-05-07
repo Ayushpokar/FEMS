@@ -13,6 +13,21 @@ CREATE TABLE IF NOT EXISTS fems.tbl_users(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )       
 
+CREATE TABLE IF NOT EXISTS fems.tbl_events(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50),
+    descrp TEXT,
+    venue VARCHAR(100),
+    category VARCHAR(50),
+    mode_of_event VARCHAR(20),
+    registration_fee int DEFAULT 0,
+    start_date TIMESTAMP,
+    end_date TIMESTAMP,
+    total_cost int,
+    audience_size int,
+    brochureurl VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
 
 --Guest Table 
 CREATE TABLE IF NOT EXISTS fems.tbl_guest(  
@@ -56,27 +71,18 @@ CREATE TABLE IF NOT EXISTS fems.tbl_event_details(
 
 CREATE TABLE IF NOT EXISTS fems.tbl_participate(
     id SERIAL PRIMARY KEY,
-    name VARCHAR(10),
-    email VARCHAR(50),
+    name VARCHAR(100),
+    email VARCHAR(100),
     mobile VARCHAR(20),
     employment_status VARCHAR(30),
-    organisation_name VARCHAR(50),
+    organisation_name VARCHAR(100),
     city VARCHAR(20)
 )
 
-CREATE TABLE IF NOT EXISTS fems.tbl_events(
+CREATE TABLE IF NOT EXISTS fems.tbl_participate_master(
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50),
-    descrp TEXT,
-    venue VARCHAR(100),
-    category VARCHAR(50),
-    mode_of_event VARCHAR(20),
-    registration_fee int DEFAULT 0,
-    start_date TIMESTAMP,
-    end_date TIMESTAMP,
-    total_cost int,
-    audience_size int,
-    brochureurl VARCHAR(100),
+    participate_id int REFERENCES fems.tbl_participate,
+    event_id int REFERENCES fems.tbl_events(id) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
 

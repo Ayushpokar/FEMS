@@ -21,15 +21,15 @@ app.get('/register', (req, res)=>{
     res.sendFile(__dirname+'/public/faculty'+ '/register.html');
 })
 
-app.get('/createguest', (req, res)=>{
+app.get('/create/guest', (req, res)=>{
     res.sendFile(__dirname+'/public/guest'+'/guest.html');
 })
 
-app.get('/registration', (req, res)=>{
+app.get('/event/register', (req, res)=>{
     res.sendFile(__dirname+'/public/event'+'/participate.html');
 })
 
-app.get('/createevent', (req, res)=>{
+app.get('event/create', (req, res)=>{
     res.sendFile(__dirname+'/public/event'+'/create.html');
 })
 
@@ -37,19 +37,19 @@ app.get('/createstatus',(req, res)=>{
     res.sendFile(__dirname+'/public/event'+'/eventStatus.html');
 })
 
-app.get('/volunteer', (req, res)=>{
+app.get('create/volunteer', (req, res)=>{
     res.sendFile(__dirname+'/public/volunteer'+'/add_volunteer.html');
 })
-app.get('/volunteergroup', (req, res)=>{
+app.get('create/volunteergroup', (req, res)=>{
     res.sendFile(__dirname+'/public/volunteer'+'/volunteer_group.html');
 })
 
-app.get('/allevents',(req, res)=>{
+app.get('/events',(req, res)=>{
     res.sendFile(__dirname+'/public/event'+'/allevent_details.html')
 })
 // public/event/allevent_details.html
 
-app.get('/edit-event',(req, res)=>{
+app.get('/event/edit',(req, res)=>{
     res.sendFile(__dirname+'/public/event'+'/edit_event.html');
 })
 

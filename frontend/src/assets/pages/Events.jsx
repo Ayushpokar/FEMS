@@ -69,7 +69,8 @@ export function Events() {
         const fetchEvents = async () => {
             try {
                 const res = await axios.get(`${API}/api/events`);
-                setEvents(Array.isArray(res.data.values) ? res.data.values : []); setIsLoading(false);
+                setEvents(Array.isArray(res.data) ? res.data : []);
+                setIsLoading(false);
             } catch (error) {
                 console.log(error);
                 setError("Could not load events. Please try again later");
@@ -104,7 +105,7 @@ export function Events() {
         Rejected: safeEvents.filter((e) => e.status === 'rejected').length,
         Modification: safeEvents.filter((e) => e.status === 'modification_required').length
     };
-    const filterEvents = (events || []).filter(event => {
+    const filterEvents = safeEvents.filter(event => {
         if (activeTab === 'All') return true;
         if (activeTab === 'Pending') return event.status === 'created' || !event.status;
         if (activeTab === 'Approved') return event.status === 'approved';

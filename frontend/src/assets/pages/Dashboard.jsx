@@ -19,7 +19,7 @@ export function DashboardCard({ title, value, icon: Icon, iconColor }) {
     )
 }
 
-function QuickAction({ title, descrp, icon: Icon, iconbg, link}) {
+function QuickAction({ title, descrp, icon: Icon, iconbg, link }) {
     return (
         <Link to={link} className="bg-white border border-gray-200 rounded-xl p-7 flex  items-center space-x-4 hover:shadow-md" >
             <div className={`${iconbg} text-white p-3 rounded-lg shrink-0`}>
@@ -36,7 +36,8 @@ function QuickAction({ title, descrp, icon: Icon, iconbg, link}) {
 
 export function Dashboard() {
     const [events, setEvents] = useState([]);
-
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
     useEffect(() => {
         const fetchEvents = async () => {
             try {

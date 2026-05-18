@@ -69,7 +69,7 @@ export function Events() {
         const fetchEvents = async () => {
             try {
                 const res = await axios.get(`${API}/api/events`);
-                setEvents(res.data)
+                setEvents(Array.isArray(res.data) ? res.data : [])
                 setIsLoading(false);
             } catch (error) {
                 console.log(error);
@@ -98,12 +98,12 @@ export function Events() {
     }
     const counts = {
         All: events.length,
-        Pending: events.filter((e) => e.status === 'created' || !e.status).length,
-        Approved: events.filter((e) => e.status === 'approved').length,
-        Rejected: events.filter((e) => e.status === 'rejected').length,
-        Modification: events.filter((e) => e.status === 'modification_required').length
+        Pending: (events || []).filter((e) => e.status === 'created' || !e.status).length,
+        Approved: (events || []).filter((e) => e.status === 'approved').length,
+        Rejected: (events || []).filter((e) => e.status === 'rejected').length,
+        Modification: (events || []).filter((e) => e.status === 'modification_required').length
     }
-    const filterEvents = events.filter(event => {
+    const filterEvents = (events || []).filter(event => {
         if (activeTab === 'All') return true;
         if (activeTab === 'Pending') return event.status === 'created' || !event.status;
         if (activeTab === 'Approved') return event.status === 'approved';
@@ -174,7 +174,7 @@ export function Events() {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 gap-6">
-                    {filterEvents.map((event) => (
+                    {(filterEvents || []).map((event) => (
                         <EventCard key={event.event_id} eventData={event} />
                     ))}
                 </div>

@@ -168,7 +168,7 @@ export const get_events_details = async (req, res) => {
         res.status(200).json(data.rows);
     } catch (error) {
         console.error(error);
-        res.status(404).json({ status: "fail", message: "Something went wrong" });
+        res.status(404).json([]);
     }
 }
 // get_events_details()

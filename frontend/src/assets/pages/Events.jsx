@@ -96,13 +96,15 @@ export function Events() {
             </div>
         );
     }
+    const safeEvents = Array.isArray(events) ? events : [];
+
     const counts = {
-        All: events.length,
-        Pending: (events || []).filter((e) => e.status === 'created' || !e.status).length,
-        Approved: (events || []).filter((e) => e.status === 'approved').length,
-        Rejected: (events || []).filter((e) => e.status === 'rejected').length,
-        Modification: (events || []).filter((e) => e.status === 'modification_required').length
-    }
+        All: safeEvents.length,
+        Pending: safeEvents.filter((e) => e.status === 'created' || !e.status).length,
+        Approved: safeEvents.filter((e) => e.status === 'approved').length,
+        Rejected: safeEvents.filter((e) => e.status === 'rejected').length,
+        Modification: safeEvents.filter((e) => e.status === 'modification_required').length
+    };
     const filterEvents = (events || []).filter(event => {
         if (activeTab === 'All') return true;
         if (activeTab === 'Pending') return event.status === 'created' || !event.status;

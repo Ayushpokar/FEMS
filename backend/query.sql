@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS fems.tbl_users(
     user_department VARCHAR(20),
     user_password VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)       
+);""
 
 CREATE TABLE IF NOT EXISTS fems.tbl_events(
     id SERIAL PRIMARY KEY,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS fems.tbl_events(
     audience_size int,
     brochureurl VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);
 
 --Guest Table 
 CREATE TABLE IF NOT EXISTS fems.tbl_guest(  
@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS fems.tbl_guest(
     company VARCHAR(50),
     designation VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
-INSERT into fems.tbl_guest(id,name) VALUES(0, 'No Guest')
+);
+INSERT into fems.tbl_guest(id,name) VALUES(0, 'No Guest');
 
 
 --Volunteer Details
@@ -50,14 +50,14 @@ CREATE TABLE IF NOT EXISTS fems.tbl_volunteer(
     email VARCHAR(50),
     mobile VARCHAR(20),
     department VARCHAR(20)
-)
+);
 
 --Volunteer Group Details
 CREATE TABLE IF NOT EXISTS fems.tbl_volunteer_group(
     id SERIAL PRIMARY KEY,
     name VARCHAR(50),
     register_number VARCHAR(20) REFERENCES fems.tbl_volunteer(register_number)
-)
+);
 
 INSERT INTO fems.tbl_volunteer_group VALUES(null,'No Group',null);
 
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS fems.tbl_event_details(
     guest_id int REFERENCES fems.tbl_guest,
     user_id int REFERENCES fems.tbl_users,
     group_id int REFERENCES fems.tbl_volunteer_group
-)
+);
 
 CREATE TABLE IF NOT EXISTS fems.tbl_participate(
     id SERIAL PRIMARY KEY,
@@ -77,14 +77,14 @@ CREATE TABLE IF NOT EXISTS fems.tbl_participate(
     employment_status VARCHAR(30),
     organisation_name VARCHAR(100),
     city VARCHAR(20)
-)
+);
 
 CREATE TABLE IF NOT EXISTS fems.tbl_participate_master(
     id SERIAL PRIMARY KEY,
     participate_id int REFERENCES fems.tbl_participate,
     event_id int REFERENCES fems.tbl_events(id) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);
 
 CREATE TABLE IF NOT EXISTS fems.tbl_event_status(
     id SERIAL PRIMARY KEY,
@@ -93,6 +93,6 @@ CREATE TABLE IF NOT EXISTS fems.tbl_event_status(
     status VARCHAR(50) DEFAULT 'created',
     description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);
 
     

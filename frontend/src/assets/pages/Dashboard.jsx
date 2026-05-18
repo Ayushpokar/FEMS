@@ -42,7 +42,7 @@ export function Dashboard() {
         const fetchEvents = async () => {
             try {
                 const res = await axios.get(`${API}/api/events`);
-                setEvents(res.data)
+                setEvents(Array.isArray(res.data) ? res.data : []);
                 setIsLoading(false);
             } catch (error) {
                 console.log(error);

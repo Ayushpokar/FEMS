@@ -50,18 +50,18 @@
 
         async function createevent() {
             const payload= {
-                "event_name": document.getElementById('name').value,
-                "event_descrption": document.getElementById('descrp').value,
-                "event_venue":document.getElementById('venue').value,
-                "event_category":document.getElementById('category').value,
-                "event_mode":document.querySelector('input[name="mode"]:checked').value,
-                "event_fee":document.getElementById('fee').value,
-                "event_start_time":document.getElementById('starttime').value,
-                "event_end_time": document.getElementById('endtime').value,
-                "total_cost": document.getElementById('totalcost').value,
-                "audience_size": document.getElementById('size').value,
-                "guest_id":document.getElementById('guest').value,
-                "group_id":document.getElementById('group').value
+                    "event_name": document.getElementById('name').value,
+                    "event_descrption": document.getElementById('descrp').value,
+                    "event_venue":document.getElementById('venue').value,
+                    "event_category":document.getElementById('category').value,
+                    "event_mode":document.querySelector('input[name="mode"]:checked').value,
+                    "event_fee":document.getElementById('fee').value,
+                    "event_start_time":document.getElementById('starttime').value,
+                    "event_end_time": document.getElementById('endtime').value,
+                    "total_cost": document.getElementById('totalcost').value,
+                    "audience_size": document.getElementById('size').value,
+                    "guest_id":document.getElementById('guest').value,
+                    "group_id":document.getElementById('group').value
             }
 
             const res = await fetch('/createevent',{

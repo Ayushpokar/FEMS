@@ -11,7 +11,7 @@
     <pre>
 
         <form>
-            <select name="event_id" id="events" onchange="event_detail_show(this.value);" ><option value="" disabled selected hidden>Select Event</option></select>
+            <div id="events"></div><!-- <select name="event_id" id="events" onchange="event_detail_show(this.value);" ><option value="" disabled selected hidden>Select Event</option></select> -->
             <div id="event"></div>
             Name: <input type="text" id="name">
             Email: <input type="email" name="" id="email">
@@ -40,17 +40,22 @@
             responce = await res.json();
             // dropdown.innerHTML = '<option value="" disabled selected>Select Event</option>';
             if (eventId) {
-                const specificEvent = responce.find(e => e.event_id == eventId);
-
-                if(specificEvent){
-                    dropdown.innerHTML = `<option selected disabled value="${specificEvent.event_id}">${specificEvent.event_name}</option>`;
-                    event_detail_show(eventId);
-                }
+                event_detail_show(eventId);
             }
             else {
-                responce.forEach(event => {
-                    dropdown.innerHTML += `<option value="${event.event_id}">${event.event_name}${event.event_id}</option>`
-                });
+let htmlString = `
+        <select name="event_id" id="events" onchange="event_detail_show(this.value);" class="border p-2 rounded">
+            <option value="" disabled selected hidden>Select Event</option>
+    `; 
+    
+    // 2. Loop through the API response and add options to the string
+    responce.forEach(event => {
+        htmlString += `<option value="${event.event_id}">${event.event_name} (${event.event_id})</option>`;
+    });
+
+    // 3. Close the select tag
+    htmlString += `</select>`;
+    dropdown.innerHTML = htmlString;
             }
         }
 

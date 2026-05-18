@@ -29,7 +29,7 @@ app.get('/event/register', (req, res)=>{
     res.sendFile(__dirname+'/public/event'+'/participate.html');
 })
 
-app.get('event/create', (req, res)=>{
+app.get('/event/create', (req, res)=>{
     res.sendFile(__dirname+'/public/event'+'/create.html');
 })
 

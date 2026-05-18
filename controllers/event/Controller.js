@@ -32,7 +32,7 @@ export const createevent = async (req, res) => {
             payload.total_cost || null,
             payload.audience_size || null
         ]
-
+        console.log(values)
         const result = await pool.query(query1, values);
         const id = result.rows[0].id
         const query2 = "INSERT INTO fems.tbl_event_status(event_id,user_id, description) VALUES($1, $2, $3)";
@@ -52,7 +52,7 @@ export const createevent = async (req, res) => {
         console.log(values3)
         const result3 = await pool.query(query3, values3);
         console.log(result.rows[0].id);
-        const guest_name = await pool.query("SELECT name FROM fems.tbl_guest WHERE id=$1", [payload.guest_id]);
+        const guest_name = await pool.query("SELECT name FROM fems.tbl_guest WHERE id=$1", [2]);
         console.log(guest_name.rows[0].name)
         const sendingmail = {
             from: "pokar.ayush2024e@vitstudent.ac.in",
@@ -91,7 +91,7 @@ export const createevent = async (req, res) => {
                 <tr><th style="border: 1px solid #ffffff;padding: 8px;text-align: left;background-color: #96D4D4;width: 30%;">Event Total Cost</th>
                     <td style="border: 1px solid #ffffff;padding: 8px;text-align: left;background-color: #96D4D4;">${payload.total_cost}</td></tr>
                 <tr><th style="border: 1px solid #ffffff;padding: 8px;text-align: left;background-color: #96D4D4;width: 30%;">Event Registration Fee</th>
-                    <td style="border: 1px solid #ffffff;padding: 8px;text-align: left;background-color: #96D4D4;">${payload.event_name}</td></tr>
+                    <td style="border: 1px solid #ffffff;padding: 8px;text-align: left;background-color: #96D4D4;">${payload.event_fee}</td></tr>
                 <tr><th style="border: 1px solid #ffffff;padding: 8px;text-align: left;background-color: #96D4D4;width: 30%;">Expected Audience Size</th>
                 <td style="border: 1px solid #ffffff;padding: 8px;text-align: left;background-color: #96D4D4;">${payload.audience_size}</td></tr>
                 </table>    
@@ -107,12 +107,13 @@ export const createevent = async (req, res) => {
 
             </body>
             </html>`
-                    }
+        }
         transporter.sendMail(sendingmail, (error, info) => {
             if (error) {
                 return console.log(error);
             }
             console.log('Email send', info.response);
+            res.status(201).json({ status: "success", message: "Event is Created" })
         })
     } catch (error) {
         console.log(error)
@@ -176,16 +177,29 @@ export const getevent = async (req, res) => {
     try {
         const event_id = req.params.id;
         const query = `
-            SELECT 
-            e.*,
-            g.id as guest_id,
-            vg.id as group_id
-            FROM 
-            fems.tbl_event_details ed
-            LEFT JOIN fems.tbl_events e ON ed.event_id = e.id
-            LEFT JOIN fems.tbl_guest g ON ed.guest_id = g.id
-            LEFT JOIN fems.tbl_volunteer_group vg ON ed.group_id = vg.id
-            WHERE e.id = $1
+                SELECT 
+                    e.*,
+                    g.name AS guest_name,
+                    vg.name AS group_name,
+                    latest_status.es_status AS current_status
+                FROM 
+                    fems.tbl_event_details ed
+                LEFT JOIN fems.tbl_events e ON ed.event_id = e.id
+                LEFT JOIN fems.tbl_guest g ON ed.guest_id = g.id
+                LEFT JOIN fems.tbl_volunteer_group vg ON ed.group_id = vg.id
+                LEFT JOIN (
+                    WITH temp AS (
+                        SELECT event_id, MAX(created_at) as created_at_max
+                        FROM fems.tbl_event_status
+                        GROUP BY event_id
+                    )
+                    SELECT es.event_id as es_event_id, es.status as es_status
+                    FROM fems.tbl_event_status as es
+                    INNER JOIN temp ON temp.event_id = es.event_id 
+                                    AND es.created_at = temp.created_at_max
+                ) AS latest_status ON e.id = latest_status.es_event_id 
+                WHERE 
+                    e.id = $1; 
             `;
         const guest_query = `
         SELECT DISTINCT (name),id
@@ -252,7 +266,7 @@ export const deleteevent = async (req, res) => {
     try {
         const event_id = req.params.id;
         const query = "CALL fems.proc_delete_event($1)";
-        const result = await pool.query(query,[event_id]);
+        const result = await pool.query(query, [event_id]);
         res.status(200).json({ message: "Event is Deleted" });
     } catch (error) {
         console.log(error);
@@ -292,7 +306,7 @@ export const updatestatus = async (req, res) => {
     }
 }
 
-export const event_for_participate = async (req, res) =>{
+export const event_for_participate = async (req, res) => {
     const query = `
         SELECT * 
         FROM

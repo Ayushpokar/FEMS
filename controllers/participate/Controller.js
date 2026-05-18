@@ -13,7 +13,7 @@ export const createparticipate = async (req, res)=>{
             data.mobile || null,
             data.employment_status || null,
             data.organisation_name || null,
-            data.city
+            data.city || null
         ]
         const participate_id = await pool.query(query, values);
         const query_for_master = "INSERT INTO fems.tbl_participate_master(participate_id, event_id) VALUES($1, $2)";

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-const API = process.env.REACT_APP_API_URL;
+const API = process.env.VITE_API_URL;
 
 export function EditEvent() {
     const {id} = useParams();

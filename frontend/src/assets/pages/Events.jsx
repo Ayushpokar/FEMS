@@ -5,7 +5,7 @@ import { DashboardCard } from "./Dashboard";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-const API = process.env.REACT_APP_API_URL;
+const API = process.env.VITE_API_URL;
 
 export function EventCard({ eventData }) {
     const statusBadges = {

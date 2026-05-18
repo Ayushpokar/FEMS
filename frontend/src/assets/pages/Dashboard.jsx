@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import { Calendar, CheckCircle, CircleX, Clock, FileText, UserPlus, Users } from "lucide-react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-const API = process.env.REACT_APP_API_URL;
+const API = process.env.VITE_API_URL;
 
 
 export function DashboardCard({ title, value, icon: Icon, iconColor }) {

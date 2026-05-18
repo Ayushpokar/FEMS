@@ -5,6 +5,7 @@ import { DashboardCard } from "./Dashboard";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+const API = process.env.REACT_APP_API_URL;
 
 export function EventCard({ eventData }) {
     const statusBadges = {
@@ -67,7 +68,7 @@ export function Events() {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const res = await axios.get('http://localhost:7000/api/events');
+                const res = await axios.get(`${API}/api/events`);
                 setEvents(res.data)
                 setIsLoading(false);
             } catch (error) {

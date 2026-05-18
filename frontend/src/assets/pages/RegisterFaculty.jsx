@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar";
+const API = process.env.REACT_APP_API_URL;
 
 export function RegisterFaculty() {
     return (

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+const API = process.env.REACT_APP_API_URL;
+
 export function EditEvent() {
     const {id} = useParams();
     const [eventData, setEventData] = useState([])
@@ -42,7 +44,7 @@ export function EditEvent() {
         useEffect(() => {
         const fetchSingleEvent = async () => {
             try {
-                const res = await axios.get(`http://localhost:7000/api/getevent/${id}`)
+                const res = await axios.get(`${API}/api/getevent/${id}`)
                 const result = res.data.values[0];                
                 setFormData({
                     event_name:result.name,
@@ -82,7 +84,7 @@ export function EditEvent() {
         setMessage(null);
 
         try {
-            const res = await axios.put(`http://localhost:7000/api/updateevent/${id}`, formData);
+            const res = await axios.put(`${API}/api/updateevent/${id}`, formData);
             alert("Event updated successfully")
             setIsSubmitting(false);
         } catch (error) {

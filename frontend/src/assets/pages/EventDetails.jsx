@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import { ArrowLeft, CheckCircle, AlertCircle, XCircle, Users } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
+const API = process.env.REACT_APP_API_URL;
 
 export function FetchData() {
 
@@ -27,7 +28,7 @@ export function EventDetails() {
     useEffect(() => {
         const fetchSingleEvent = async () => {
             try {
-                const res = await axios.get(`http://localhost:7000/api/getevent/${id}`)
+                const res = await axios.get(`${API}/api/getevent/${id}`)
                 // const result = res.data;                
                 setEventData(res.data.values[0])
                 setIsLoading(false);
@@ -50,7 +51,7 @@ export function EventDetails() {
         if (!window.confirm(confirmMessage)) return;
 
         try {
-            await axios.patch(`http://localhost:7000/api/event/updatestatus/${id}/${status}`, {
+            await axios.patch(`${API}/api/event/updatestatus/${id}/${status}`, {
                 comment: comment
             });
 

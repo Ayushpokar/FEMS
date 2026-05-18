@@ -3,6 +3,8 @@ import Navbar from "../components/Navbar";
 import { Calendar, CheckCircle, CircleX, Clock, FileText, UserPlus, Users } from "lucide-react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+const API = process.env.REACT_APP_API_URL;
+
 
 export function DashboardCard({ title, value, icon: Icon, iconColor }) {
     return (<div className="border bg-white border-gray-200 rounded-xl p-6 flex justify-between">
@@ -38,7 +40,7 @@ export function Dashboard() {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const res = await axios.get('http://localhost:7000/api/events');
+                const res = await axios.get(`${API}/api/events`);
                 setEvents(res.data)
                 setIsLoading(false);
             } catch (error) {

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
+
+const API = process.env.REACT_APP_API_URL;
 export function CreateEventForm() {
 
     const [formData, setFormData] = useState({
@@ -54,7 +56,7 @@ export function CreateEventForm() {
         setMessage(null);
 
         try {
-            const res = await axios.post('http://localhost:7000/api/createevent', formData);
+            const res = await axios.post(`${API}/api/createevent`, formData);
             console.log('Success:', res.data);
             alert(res.data.message);
             setFormData({

@@ -69,8 +69,7 @@ export function Events() {
         const fetchEvents = async () => {
             try {
                 const res = await axios.get(`${API}/api/events`);
-                setEvents(Array.isArray(res.data) ? res.data : [])
-                setIsLoading(false);
+                setEvents(Array.isArray(res.data.values) ? res.data.values : []); setIsLoading(false);
             } catch (error) {
                 console.log(error);
                 setError("Could not load events. Please try again later");

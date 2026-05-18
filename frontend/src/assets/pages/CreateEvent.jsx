@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
 
-const API = process.env.VITE_API_URL;
+const API = import.meta.env.VITE_API_URL;
 export function CreateEventForm() {
 
     const [formData, setFormData] = useState({

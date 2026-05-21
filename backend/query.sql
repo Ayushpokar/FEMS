@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS fems.tbl_guest(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 INSERT into fems.tbl_guest(id,name) VALUES(0, 'No Guest');
-
+INSERT into fems.tbl_guest(id,name) VALUES(1, 'Ayush');
 
 --Volunteer Details
 CREATE TABLE IF NOT EXISTS fems.tbl_volunteer(
@@ -58,8 +58,8 @@ CREATE TABLE IF NOT EXISTS fems.tbl_volunteer_group(
     name VARCHAR(50),
     register_number VARCHAR(20) REFERENCES fems.tbl_volunteer(register_number)
 );
-
-INSERT INTO fems.tbl_volunteer_group VALUES(null,'No Group',null);
+INSERT INTO fems.tbl_volunteer_group VALUES(1,'Lion',null);
+INSERT INTO fems.tbl_volunteer_group VALUES(0,'No Group',null);
 
 CREATE TABLE IF NOT EXISTS fems.tbl_event_details(
     id SERIAL PRIMARY KEY,

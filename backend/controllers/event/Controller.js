@@ -113,8 +113,9 @@ export const createevent = async (req, res) => {
                 return console.log(error);
             }
             console.log('Email send', info.response);
-            res.status(201).json({ status: "success", message: "Event is Created" })
+            return res.status(201).json({ status: "success", message: "Event is Created" })
         })
+        res.status(201).json({ status: "success", message: "Event is Created" });
     } catch (error) {
         console.log(error)
         res.status(403).json({ status: "fail", message: "Something went wrong" });
@@ -141,7 +142,8 @@ export const get_events_details = async (req, res) => {
             ev.registration_fee,
             vg.name as group_name , 
             g.name as guest_name,
-            es_status as status
+            es_status as status,
+            comment
         FROM fems.tbl_event_details e
         LEFT JOIN fems.tbl_volunteer_group vg ON e.group_id = vg.id
         LEFT JOIN fems.tbl_guest g ON e.guest_id = g.id
@@ -155,7 +157,7 @@ export const get_events_details = async (req, res) => {
 		GROUP BY event_id)
 		
 		SELECT 
-			es.event_id as es_event_id, es.status as es_status
+			es.event_id as es_event_id,es.description as comment, es.status as es_status
 		FROM fems.tbl_event_status as es
 		INNER JOIN temp on temp.event_id = es.event_id
 		WHERE es.created_at =created_at_max
@@ -181,7 +183,9 @@ export const getevent = async (req, res) => {
                     e.*,
                     g.name AS guest_name,
                     vg.name AS group_name,
-                    latest_status.es_status AS current_status
+                    status_table.es_status AS current_status,
+                    status_table.comment
+
                 FROM 
                     fems.tbl_event_details ed
                 LEFT JOIN fems.tbl_events e ON ed.event_id = e.id
@@ -193,11 +197,11 @@ export const getevent = async (req, res) => {
                         FROM fems.tbl_event_status
                         GROUP BY event_id
                     )
-                    SELECT es.event_id as es_event_id, es.status as es_status
+                    SELECT es.event_id as es_event_id, es.description as comment, es.status as es_status
                     FROM fems.tbl_event_status as es
                     INNER JOIN temp ON temp.event_id = es.event_id 
                                     AND es.created_at = temp.created_at_max
-                ) AS latest_status ON e.id = latest_status.es_event_id 
+                ) AS status_table ON e.id = status_table.es_event_id 
                 WHERE 
                     e.id = $1; 
             `;

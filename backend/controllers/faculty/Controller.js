@@ -14,7 +14,7 @@ export const register = async (req, res)=>{
             data.user_name,
             data.user_email,
             data.user_mobile,
-            data.user_role,
+            data.user_role || 'faculty',
             data.user_department,
             hashpassword
         ]

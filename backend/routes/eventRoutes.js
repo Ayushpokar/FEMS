@@ -7,7 +7,7 @@ import {createevent,get_events_details ,getevent,updateevent, deleteevent, updat
 import { addvolunteer, getvolunteer ,creategroup, getvolunteer_group} from '../controllers/volunteer/Controller.js';
 const router = Router();
 
-router.route('/register').post(register);
+router.route('/api/faculty/register').post(register);
 router.route('/guest').post(createguest);
 router.route('/api/event/participate').post(createparticipate);
 router.route('/get_guest_details').get(get_guest_details);
@@ -19,6 +19,6 @@ router.route('/creategroup').post(creategroup);
 router.route('/getvolunteer_group').get(getvolunteer_group);    
 router.route('/api/getevent/:id').get(getevent);
 router.route('/api/updateevent/:id').put(updateevent);
-router.route('/deleteevent/:id').delete(deleteevent);
+router.route('/api/deleteevent/:id').delete(deleteevent);
 router.route('/api/event/updatestatus/:id/:status').patch(updatestatus).get(updatestatus);
 export default router;

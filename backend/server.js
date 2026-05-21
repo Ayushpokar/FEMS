@@ -10,8 +10,9 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(cors({  
-    origin: "https://fems-opal.vercel.app",
+    origin: process.env.VITE_URL,
 }));
+console.log(process.env.VITE_URL)
 
 app.use(express.json()); 
 app.use("/", router);

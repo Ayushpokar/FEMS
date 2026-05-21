@@ -6,7 +6,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 const API = import.meta.env.VITE_API_URL;
-const user = 'faculty';
+const user = import.meta.env.VITE_ROLE;
 
 
 export function EventCard({ eventData, onDelete }) {

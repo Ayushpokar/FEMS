@@ -95,4 +95,16 @@ CREATE TABLE IF NOT EXISTS fems.tbl_event_status(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-    
+CREATE PROCEDURE fems.proc_delete_event(eventID int) 
+LANGUAGE plpgsql
+AS $$
+BEGIN
+DELETE from fems.tbl_event_details WHERE event_id = eventID;
+DELETE FROM fems.tbl_event_status WHERE event_id = eventID;
+DELETE FROM fems.tbl_events WHERE id = eventID;
+
+COMMIT;
+END;
+$$;
+
+

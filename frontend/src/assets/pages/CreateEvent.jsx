@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const API = import.meta.env.VITE_API_URL;
-const user = import.meta.env.ROLE;
+const user = import.meta.env.VITE_ROLE;
 export function CreateEventForm() {
     const navigate = useNavigate();
 

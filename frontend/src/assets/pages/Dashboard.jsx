@@ -4,7 +4,7 @@ import { Calendar, CheckCircle, CircleX, Clock, FileText, IndianRupee, Plus, Use
 import axios from "axios";
 import { Link } from "react-router-dom";
 const API = import.meta.env.VITE_API_URL;
-const user = import.meta.env.ROLE;
+const user = import.meta.env.VITE_ROLE;
 
 
 export function DashboardCard({ title, value, icon: Icon, iconColor }) {

@@ -62,22 +62,7 @@ export function CreateEventForm() {
         try {
             const res = await axios.post(`${API}/api/createevent`, formData);
             console.log('Success:', res.data);
-            alert(res.data.message);
-
-            setFormData({
-                "event_name": '',
-                "event_descrption": '',
-                "event_venue": '',
-                "event_category": '',
-                "event_mode": '',
-                "event_fee": '',
-                "event_start_time": '',
-                "event_end_time": '',
-                "total_cost": '',
-                "audience_size": '',
-                "guest_id": '',
-                "group_id": ''
-            })
+            alert("Event Created");
             navigate('/events');
         } catch (error) {
             console.log(error);

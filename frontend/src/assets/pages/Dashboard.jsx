@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { Calendar, CheckCircle, CircleX, Clock, FileText, UserPlus, Users } from "lucide-react";
+import { Calendar, CheckCircle, CircleX, Clock, FileText, IndianRupee, Plus, UserPlus, Users } from "lucide-react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 const API = import.meta.env.VITE_API_URL;
+const user = import.meta.env.ROLE;
 
 
 export function DashboardCard({ title, value, icon: Icon, iconColor }) {
-    return (<div className="border bg-white border-gray-200 rounded-xl p-6 flex justify-between">
+    return (
+    <div className="border bg-white border-gray-200 rounded-xl p-6 flex justify-between">
         <div>
             <p className="text-gray-500 text-sm mb-1">{title}</p>
             <h3 className="text-2xl font-bold text-gray-700">{value}</h3>
@@ -66,7 +68,7 @@ export function Dashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
                 <DashboardCard
-                    title="Total Events"
+                    title={user==='hod'?'Total Event':'My Event'}
                     value={counts.All}
                     icon={Users}
                     iconColor="text-blue-500"
@@ -97,25 +99,25 @@ export function Dashboard() {
                 <div><h3 className="text-xl font-semibold ">Quick Action</h3></div>
                 <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-1 gap-6 mt-6">
                     <QuickAction
-                        title="Event Approval"
-                        descrp="Review pending events"
-                        icon={Calendar}
+                        title={user==='hod'?"Event Approval":"Create Event"}
+                        descrp={user==='hod'?"Review pending event":"Create a new event"}
+                        icon={user==='hod'?Calendar:Plus}
                         iconbg="bg-blue-500"
-                        link={'/events'}
+                        link={user==='hod'?'/events':'/create-event'}
                     />
                     <QuickAction
-                        title="Register Faculty"
-                        descrp="Add new faculty members"
-                        icon={UserPlus}
+                        title={user==='hod'?"Event Approval":"Events"}
+                        descrp={user==='hod'?"Add new faculty members":"View all events"}
+                        icon={user==='hod'?UserPlus:Calendar}
                         iconbg="bg-purple-500"
-                        link={'/register-faculty'}
+                        link={user==='hod'?'/register-faculty':'/events'}
                     />
                     <QuickAction
-                        title="Event Reports"
-                        descrp="Review pending events"
-                        icon={FileText}
+                        title={user==='hod'?"Event Reports":"Submit Claim"}
+                        descrp={user==='hod'?"Review pending events":"Submit expense claims"}
+                        icon={user==='hod'?FileText:IndianRupee}
                         iconbg="bg-green-500"
-                        link={'/reports'}
+                        link={user==='hod'?'/reports':'/claims'}
                     />
                 </div>
             </div>

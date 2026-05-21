@@ -1,4 +1,4 @@
-import { EditIcon, Eye } from "lucide-react";
+import { Delete, EditIcon, Eye, Trash, Trash2 } from "lucide-react";
 import Navbar from "../components/Navbar";
 
 import { DashboardCard } from "./Dashboard";
@@ -6,13 +6,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 const API = import.meta.env.VITE_API_URL;
+const user = 'faculty';
 
-export function EventCard({ eventData }) {
+
+export function EventCard({ eventData, onDelete }) {
     const statusBadges = {
         approved: <span className="px-2 py-0.5 bg-green-200 text-green-700 rounded-md text-[11px] font-bold">APPROVED</span>,
         rejected: <span className="px-2 py-0.5 bg-red-200 text-red-700 rounded-md text-[11px] font-bold">REJECTED</span>,
         pending: <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded-md text-[11px] font-bold">PENDING</span>,
-        modification_required: <span className="px-2 py-0.5 bg-orange-100 text-orange-700 rounded-md text-[11px] font-bold">MODIFICATION</span>,
+        modification_required: <span className="px-2 py-0.5 bg-orange-100 text-orange-700 rounded-md text-[11px] font-bold">{user === 'hod' ? 'MODIFICATION' : 'MODIFICATION REQUIRED'}</span>,
     };
     const formatLocalTime = (utcString) => {
         if (!utcString) return "Time TBA"; // Safety check if data is missing
@@ -41,8 +43,14 @@ export function EventCard({ eventData }) {
                     <p className="text-gray-600 text-sm">{eventData.descrp}</p>
 
                     <p className="text-gray-400 text-sm mt-1">
-                        {eventData.guest_name}<span className="mx-1">•</span> {formatLocalTime(eventData?.start_date)} <span className="mx-1">•</span> {eventData.venue}
+                        {user === 'hod' && (<>{eventData.guest_name}<span className='mx-1'>•</span></>)}{formatLocalTime(eventData?.start_date)} <span className="mx-1">•</span> {eventData.venue}
                     </p>
+                    {user === 'faculty' && eventData.status === 'modification_required' && (
+                        <div className="border border-red-300 bg-red-50 p-3 rounded-md w-5xl">
+                            <label htmlFor="" className="text-red-900">Comment From HOD:</label>
+                            <p className="text-red-700">{eventData.comment}</p>
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex flex-col space-y-2 min-w-27.5">
@@ -51,22 +59,26 @@ export function EventCard({ eventData }) {
                         <Eye size={16} className="mr-2" /> View
                     </Link>
 
-                    <Link to={`/edit/event/${eventData.event_id}`} className="flex items-center justify-center px-4 py-1.5 border border-gray-300 rounded-md text-gray-700 bg-white text-sm font-medium">
+                    {user === 'faculty' && (<><Link to={`/edit/event/${eventData.event_id}`} className="flex items-center justify-center px-4 py-1.5 border border-gray-300 rounded-md text-gray-700 bg-white text-sm font-medium">
                         <EditIcon size={16} className="mr-2" /> Edit
-                    </Link>
+                    </Link></>)}
+                    {user === 'faculty' && eventData.status !== 'approved' && eventData.status !== 'rejected' && (<>
+                        <button onClick={() => onDelete(eventData.event_id)} className="flex items-center justify-center px-4 py-1.5 border border-gray-300 rounded-md text-white bg-red-600 text-sm font-medium">
+                            <Trash2 size={16} className="mr-2" /> Delete Event
+                        </button></>)}
                 </div>
             </div>
         </div>
     );
 }
+  
+
 export function Events() {
-    const [events, setEvents] = useState([]);
+    const [events, setEvents] = useState([])
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [activeTab, setActiveTab] = useState('All');
-
-    useEffect(() => {
-        const fetchEvents = async () => {
+    const fetchEvents = async () => {
             try {
                 const res = await axios.get(`${API}/api/events`);
                 setEvents(Array.isArray(res.data) ? res.data : []);
@@ -77,8 +89,24 @@ export function Events() {
                 setIsLoading(false);
             }
         };
+
+    useEffect(() => {
         fetchEvents();
     }, []);
+
+      const Deleteevent = async (event_id) => {
+        const isConfirmed = window.confirm("Do you want delete this event?");
+        if (!isConfirmed) return;
+
+        try {
+            await axios.delete(`${API}/api/deleteevent/${event_id}`);
+            fetchEvents();
+            alert("your event has been deleted");
+        } catch (error) {
+            console.log("Something went wrong while deleteing the event.")
+        }
+    }
+
     console.log(events);
 
     if (isLoading) {
@@ -122,7 +150,7 @@ export function Events() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 ">
                 <DashboardCard
-                    title="Total"
+                    title={user === 'hod' ? "Total" : "My events"}
                     value={counts['All']}
                     icon=""
                     iconColor=""
@@ -177,7 +205,7 @@ export function Events() {
             ) : (
                 <div className="grid grid-cols-1 gap-6">
                     {(filterEvents || []).map((event) => (
-                        <EventCard key={event.event_id} eventData={event} />
+                        <EventCard key={event.event_id} eventData={event} onDelete={Deleteevent} />
                     ))}
                 </div>
             )}

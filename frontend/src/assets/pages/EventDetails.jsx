@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
-import { ArrowLeft, CheckCircle, AlertCircle, XCircle, Users } from 'lucide-react';
+import { ArrowLeft, CheckCircle, AlertCircle, XCircle, Users, UsersRound, User, UsersIcon } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 const API = import.meta.env.VITE_API_URL;
+const user = import.meta.env.VITE_ROLE;
+console.log(user);
 
-export function FetchData() {
-
-    useEffect(() => {
-
-    })
+export function EventCard({ title, value, icon: Icon, iconColor }) {
+    return (
+        <div className="border bg-white border-gray-200 rounded-xl p-6 flex justify-between">
+            <div>
+                <p className="text-gray-500 text-sm mb-1">{title}</p>
+                <h3 className="text-2xl font-bold text-gray-700">{value}</h3>
+            </div>
+            {Icon && (<div className={iconColor}>
+                <Icon size={32} />
+            </div>)}
+        </div>
+    )
 }
 
 export function EventDetails() {
@@ -76,13 +85,30 @@ export function EventDetails() {
                     {statusBadges[eventData.current_status] || statusBadges['pending']}
                 </div>
             </div>
+            {user === 'faculty' && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-4">
+                    <EventCard
+                        title={"Participate"}
+                        value={2}
+                        icon={UsersIcon}
+                        iconColor="text-blue-500"
+                    />
+                    <EventCard
+                        title={"Participate"}
+                        value={2}
+                        icon=""
+                        iconColor=""
+                    />
+                </div>
+
+            )}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
                 <div className="lg:col-span-2 space-y-6">
 
                     <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                        <h3 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-100">Event Details</h3>
+                        <h3 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">Event Details</h3>
 
                         <div className="space-y-4">
                             <div>
@@ -136,9 +162,17 @@ export function EventDetails() {
                     </div>
 
                 </div>
-
+                {user === 'faculty' && (
+                    <div className="lg:col-span-1">
+                        <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm sticky top-6">
+                            <h3 className='text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2'>HOD FeedBack</h3>
+                            <p className='text-sm text-gray-600 leading-relaxed whitespace-pre-wrap'>{eventData.comment}</p>
+                        </div>
+                    </div>
+                )}
+                {}
                 <div className="lg:col-span-1">
-                    {eventData?.current_status !== 'approved' && eventData?.current_status !== 'rejected' && (
+                    {eventData?.current_status !== 'approved' && eventData?.current_status !== 'rejected' && user==='hod' && (
                         < div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm sticky top-6">
                             <h3 className="text-lg font-bold text-gray-900 mb-4">HOD Action</h3>
 

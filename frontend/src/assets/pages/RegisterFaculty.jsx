@@ -1,8 +1,48 @@
 import React from "react";
 import Navbar from "../components/Navbar";
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
 const API = import.meta.env.VITE_API_URL;
 console.log(API);
+
 export function RegisterFaculty() {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [message, setMessage] = useState(null);
+    const [formData, setFormData] = useState({
+        user_name: '',
+        user_email: '',
+        user_mobile: '',
+        user_department: '',
+        user_password: ''
+    });
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+    const handleSubmit = async (e) => {
+        e.preventDefault(); 
+        setIsSubmitting(true);
+        setMessage(null);
+
+        try {
+            const res = await axios.post(`${API}/api/faculty/register`, formData);
+            alert("Faculty Registered");
+            setFormData({
+                user_name: '',
+                user_email: '',
+                user_mobile: '',
+                user_department: '',
+                user_password: ''
+            })
+
+        } catch (error) {
+            console.log(error)
+        }
+    };
     return (
         <>
 
@@ -21,6 +61,9 @@ export function RegisterFaculty() {
                         <input
                             type="text"
                             placeholder="Enter full name"
+                            name='user_name'
+                            value={formData.user_name}
+                            onChange={handleChange}
                             className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 "
                         />
                     </div>
@@ -29,6 +72,9 @@ export function RegisterFaculty() {
                         <input
                             type="email"
                             placeholder="faculty@vit.edu"
+                            name="user_email"
+                            value={formData.user_email}
+                            onChange={handleChange}
                             className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2"
                         />
                     </div>
@@ -36,7 +82,21 @@ export function RegisterFaculty() {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Mobile</label>
                         <input
                             type="text"
+                            name="user_mobile"
+                            value={formData.user_mobile}
+                            onChange={handleChange}
                             placeholder="Mobile"
+                            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2  "
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
+                        <input
+                            type="text"
+                            name="user_department"
+                            value={formData.user_department}
+                            onChange={handleChange}
+                            placeholder="Department"
                             className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2  "
                         />
                     </div>
@@ -44,6 +104,9 @@ export function RegisterFaculty() {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
                         <input
                             type="text"
+                            name="user_password"
+                            value={formData.user_password}
+                            onChange={handleChange}
                             placeholder="Password For Faculty"
                             className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 "
                         />

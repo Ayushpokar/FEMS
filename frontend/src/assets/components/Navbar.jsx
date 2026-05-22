@@ -10,7 +10,7 @@ export default function Navbar() {
             <aside className="w-60 h-screen bg-white border-gray-200 border-2 flex flex-col sticky top-0">
                 <div className="items-center justify-center flex p-2 border-b-2 border-gray-200">
                     <div className="w-20 h-20 rounded overflow-hidden flex items-cente justify-center font-bold">
-                        <img src="/src/assets/images/VIT.png" alt="logo" className="" />
+                        <img src="../images/VIT.png" alt="logo"/>
                     </div>
                     <div>
                         <h2 className="font-bold text-gray-900 leading-tight">VIT College</h2>

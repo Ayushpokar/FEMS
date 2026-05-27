@@ -8,7 +8,7 @@ export const register = async (req, res) => {
     try {
         const data = req.body;
         console.log("data");
-        
+
         const hashpassword = await bcrypt.hash(data.user_password, 10);
         const query = "INSERT INTO fems.tbl_users(user_name, user_email, user_mobile, user_role, user_department, user_password) VALUES($1,$2,$3,$4,$5,$6)";
         const values = [
@@ -58,8 +58,8 @@ export const login = async (req, res) => {
         )
         res.cookie('auth_token', token, {
             httpOnly: true,
-            sameSite: "lax",
-            secure: false,
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // ✅ "none" for cross-origin
+            secure: process.env.NODE_ENV === "production" ? true : false,      // ✅ true in production (required with sameSite:none)
             maxAge: 60 * 60 * 1000
         });
         console.log(token);
@@ -87,10 +87,14 @@ export const me = (req, res) => {
 
 export const logout = async (req, res) => {
     try {
-        res.clearCookie("auth_token");
-        res.json({message: "Logged out"});
+        res.clearCookie("auth_token", {
+            httpOnly: true,
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            secure: process.env.NODE_ENV === "production" ? true : false,
+        });
+        res.json({ message: "Logged out" });
     } catch (error) {
         console.log(error);
-        
+
     }
 }

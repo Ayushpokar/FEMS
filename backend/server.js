@@ -3,6 +3,7 @@ import 'dotenv/config';
 import router from "./routes/eventRoutes.js";
 import cors from "cors";
 import path from 'path';
+import cookieParser from "cookie-parser";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,7 +12,10 @@ const port = process.env.PORT || 5000;
 
 app.use(cors({  
     origin: process.env.VITE_URL,
+    credentials: true,
 }));
+app.use(cookieParser());
+
 console.log(process.env.VITE_URL)
 
 app.use(express.json()); 

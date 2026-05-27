@@ -5,8 +5,7 @@ import Navbar from "./src/assets/components/Navbar";
 export default function AppLayout(){
     return (
         <div className="flex h-screen bg-gray-50">
-            <Navbar />
-
+            <Navbar  />
             <main className="flex-1 p-10 overflow-auto">
                 <Outlet />
             </main>

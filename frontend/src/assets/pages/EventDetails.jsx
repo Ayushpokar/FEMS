@@ -3,9 +3,8 @@ import Navbar from '../components/Navbar';
 import { ArrowLeft, CheckCircle, AlertCircle, XCircle, Users, UsersRound, User, UsersIcon } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../components/AuthContext';
 const API = import.meta.env.VITE_API_URL;
-const user = import.meta.env.VITE_ROLE;
-console.log(user);
 
 export function EventCard({ title, value, icon: Icon, iconColor }) {
     return (
@@ -22,6 +21,7 @@ export function EventCard({ title, value, icon: Icon, iconColor }) {
 }
 
 export function EventDetails() {
+    const { role } = useAuth();
     const { id } = useParams();
     const [eventData, setEventData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -56,7 +56,7 @@ export function EventDetails() {
     if (error) return <div className="p-10 text-center text-red-500">{error}</div>;
     if (!eventData) return <div className="p-10 text-center text-gray-500">Event not found.</div>;
     const handleStatusUpdate = async (status) => {
-        const confirmMessage = `Are you sure you want to change the status to ${status}?`;
+        const confirmMessage = `Are you sure you want to do this action?`;
         if (!window.confirm(confirmMessage)) return;
 
         try {
@@ -67,6 +67,7 @@ export function EventDetails() {
             setEventData(prev => ({ ...prev, current_status: status }));
 
             alert("Status updated successfully!");
+            setComment('');
 
         } catch (error) {
             console.error("Error updating status:", error);
@@ -85,7 +86,7 @@ export function EventDetails() {
                     {statusBadges[eventData.current_status] || statusBadges['pending']}
                 </div>
             </div>
-            {user === 'faculty' && (
+            {role === 'faculty' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-4">
                     <EventCard
                         title={"Participate"}
@@ -162,7 +163,7 @@ export function EventDetails() {
                     </div>
 
                 </div>
-                {user === 'faculty' && (
+                {role === 'faculty' && (
                     <div className="lg:col-span-1">
                         <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm sticky top-6">
                             <h3 className='text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2'>HOD FeedBack</h3>
@@ -172,7 +173,7 @@ export function EventDetails() {
                 )}
                 {}
                 <div className="lg:col-span-1">
-                    {eventData?.current_status !== 'approved' && eventData?.current_status !== 'rejected' && user==='hod' && (
+                    {eventData?.current_status !== 'approved' && eventData?.current_status !== 'rejected' && role==='hod' && (
                         < div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm sticky top-6">
                             <h3 className="text-lg font-bold text-gray-900 mb-4">HOD Action</h3>
 

@@ -2,9 +2,13 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { Calendar, CheckCircle, CircleX, Clock, FileText, IndianRupee, Plus, UserPlus, Users } from "lucide-react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { useAuth } from "../components/AuthContext";
+import { Link, useActionData, useNavigate } from "react-router-dom";
 const API = import.meta.env.VITE_API_URL;
-const user = import.meta.env.VITE_ROLE;
+
+// const auth = useAuth();
+// console.log(auth.role);
+
 
 
 export function DashboardCard({ title, value, icon: Icon, iconColor }) {
@@ -37,19 +41,29 @@ function QuickAction({ title, descrp, icon: Icon, iconbg, link }) {
 
 
 export function Dashboard() {
+    const navigate = useNavigate();
+    const { role } = useAuth();
+    console.log('dashboard',role);
+        
     const [events, setEvents] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const res = await axios.get(`${API}/api/events`);
+                const res = await axios.get(`${API}/api/events`,{
+                    withCredentials:true
+                });
                 setEvents(Array.isArray(res.data) ? res.data : []);
                 setIsLoading(false);
             } catch (error) {
                 console.log(error);
                 setError("Could not load events. Please try again later");
                 setIsLoading(false);
+                if(error.response.status === 401){
+                    alert("UnAuthorized Access");
+                    navigate('/login')
+                }
             }
         };
         fetchEvents();
@@ -68,7 +82,7 @@ export function Dashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
                 <DashboardCard
-                    title={user==='hod'?'Total Event':'My Event'}
+                    title={role==='hod'?'Total Event':'My Event'}
                     value={counts.All}
                     icon={Users}
                     iconColor="text-blue-500"
@@ -99,25 +113,25 @@ export function Dashboard() {
                 <div><h3 className="text-xl font-semibold ">Quick Action</h3></div>
                 <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-1 gap-6 mt-6">
                     <QuickAction
-                        title={user==='hod'?"Event Approval":"Create Event"}
-                        descrp={user==='hod'?"Review pending event":"Create a new event"}
-                        icon={user==='hod'?Calendar:Plus}
+                        title={role==='hod'?"Event Approval":"Create Event"}
+                        descrp={role==='hod'?"Review pending event":"Create a new event"}
+                        icon={role==='hod'?Calendar:Plus}
                         iconbg="bg-blue-500"
-                        link={user==='hod'?'/events':'/create-event'}
+                        link={role==='hod'?'/events':'/create-event'}
                     />
                     <QuickAction
-                        title={user==='hod'?"Event Approval":"Events"}
-                        descrp={user==='hod'?"Add new faculty members":"View all events"}
-                        icon={user==='hod'?UserPlus:Calendar}
+                        title={role==='hod'?"Event Approval":"Events"}
+                        descrp={role==='hod'?"Add new faculty members":"View all events"}
+                        icon={role==='hod'?UserPlus:Calendar}
                         iconbg="bg-purple-500"
-                        link={user==='hod'?'/register-faculty':'/events'}
+                        link={role==='hod'?'/register-faculty':'/events'}
                     />
                     <QuickAction
-                        title={user==='hod'?"Event Reports":"Submit Claim"}
-                        descrp={user==='hod'?"Review pending events":"Submit expense claims"}
-                        icon={user==='hod'?FileText:IndianRupee}
+                        title={role==='hod'?"Event Reports":"Submit Claim"}
+                        descrp={role==='hod'?"Review pending events":"Submit expense claims"}
+                        icon={role==='hod'?FileText:IndianRupee}
                         iconbg="bg-green-500"
-                        link={user==='hod'?'/reports':'/claims'}
+                        link={role==='hod'?'/reports':'/claims'}
                     />
                 </div>
             </div>

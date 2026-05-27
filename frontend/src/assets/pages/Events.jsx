@@ -1,20 +1,20 @@
 import { Delete, EditIcon, Eye, Trash, Trash2 } from "lucide-react";
 import Navbar from "../components/Navbar";
-
 import { DashboardCard } from "./Dashboard";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../components/AuthContext";
 const API = import.meta.env.VITE_API_URL;
-const user = import.meta.env.VITE_ROLE;
 
 
 export function EventCard({ eventData, onDelete }) {
+    const { role } = useAuth();
     const statusBadges = {
         approved: <span className="px-2 py-0.5 bg-green-200 text-green-700 rounded-md text-[11px] font-bold">APPROVED</span>,
         rejected: <span className="px-2 py-0.5 bg-red-200 text-red-700 rounded-md text-[11px] font-bold">REJECTED</span>,
         pending: <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded-md text-[11px] font-bold">PENDING</span>,
-        modification_required: <span className="px-2 py-0.5 bg-orange-100 text-orange-700 rounded-md text-[11px] font-bold">{user === 'hod' ? 'MODIFICATION' : 'MODIFICATION REQUIRED'}</span>,
+        modification_required: <span className="px-2 py-0.5 bg-orange-100 text-orange-700 rounded-md text-[11px] font-bold">{role === 'hod' ? 'MODIFICATION' : 'MODIFICATION REQUIRED'}</span>,
     };
     const formatLocalTime = (utcString) => {
         if (!utcString) return "Time TBA"; // Safety check if data is missing
@@ -43,9 +43,9 @@ export function EventCard({ eventData, onDelete }) {
                     <p className="text-gray-600 text-sm">{eventData.descrp}</p>
 
                     <p className="text-gray-400 text-sm mt-1">
-                        {user === 'hod' && (<>{eventData.guest_name}<span className='mx-1'>•</span></>)}{formatLocalTime(eventData?.start_date)} <span className="mx-1">•</span> {eventData.venue}
+                        {role === 'hod' && (<>{eventData.guest_name}<span className='mx-1'>•</span></>)}{formatLocalTime(eventData?.start_date)} <span className="mx-1">•</span> {eventData.venue}
                     </p>
-                    {user === 'faculty' && eventData.status === 'modification_required' && (
+                    {role=== 'faculty' && eventData.status === 'modification_required' && (
                         <div className="border border-red-300 bg-red-50 p-3 rounded-md w-5xl">
                             <label htmlFor="" className="text-red-900">Comment From HOD:</label>
                             <p className="text-red-700">{eventData.comment}</p>
@@ -59,10 +59,10 @@ export function EventCard({ eventData, onDelete }) {
                         <Eye size={16} className="mr-2" /> View
                     </Link>
 
-                    {user === 'faculty' && (<><Link to={`/edit/event/${eventData.event_id}`} className="flex items-center justify-center px-4 py-1.5 border border-gray-300 rounded-md text-gray-700 bg-white text-sm font-medium">
+                    {role === 'faculty' && (<><Link to={`/edit/event/${eventData.event_id}`} className="flex items-center justify-center px-4 py-1.5 border border-gray-300 rounded-md text-gray-700 bg-white text-sm font-medium">
                         <EditIcon size={16} className="mr-2" /> Edit
                     </Link></>)}
-                    {user === 'faculty' && eventData.status !== 'approved' && eventData.status !== 'rejected' && (<>
+                    {role === 'faculty' && eventData.status !== 'approved' && eventData.status !== 'rejected' && (<>
                         <button onClick={() => onDelete(eventData.event_id)} className="flex items-center justify-center px-4 py-1.5 border border-gray-300 rounded-md text-white bg-red-600 text-sm font-medium">
                             <Trash2 size={16} className="mr-2" /> Delete Event
                         </button></>)}
@@ -74,19 +74,23 @@ export function EventCard({ eventData, onDelete }) {
   
 
 export function Events() {
+    const { role } = useAuth();
     const [events, setEvents] = useState([])
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [activeTab, setActiveTab] = useState('All');
     const fetchEvents = async () => {
             try {
-                const res = await axios.get(`${API}/api/events`);
-                setEvents(Array.isArray(res.data) ? res.data : []);
-                setIsLoading(false);
-            } catch (error) {
-                console.log(error);
-                setError("Could not load events. Please try again later");
-                setIsLoading(false);
+                const res = await axios.get(`${API}/api/events`, {
+                    withCredentials: true
+                });
+                setEvents(res.data); 
+                
+            } catch (err) {
+                console.error("Failed to fetch events:", err);
+                setError("Could not load events.");
+            } finally {
+                setIsLoading(false); 
             }
         };
 
@@ -150,7 +154,7 @@ export function Events() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 ">
                 <DashboardCard
-                    title={user === 'hod' ? "Total" : "My events"}
+                    title={role === 'hod' ? "Total" : "My events"}
                     value={counts['All']}
                     icon=""
                     iconColor=""

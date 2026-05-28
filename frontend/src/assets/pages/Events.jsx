@@ -5,7 +5,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
-const API = import.meta.env.VITE_API_URL;
 
 
 export function EventCard({ eventData, onDelete }) {
@@ -81,7 +80,7 @@ export function Events() {
     const [activeTab, setActiveTab] = useState('All');
     const fetchEvents = async () => {
             try {
-                const res = await axios.get(`${API}/api/events`, {
+                const res = await axios.get(`/api/events`, {
                     withCredentials: true
                 });
                 setEvents(res.data); 
@@ -103,7 +102,7 @@ export function Events() {
         if (!isConfirmed) return;
 
         try {
-            await axios.delete(`${API}/api/deleteevent/${event_id}`);
+            await axios.delete(`/api/deleteevent/${event_id}`);
             fetchEvents();
             alert("your event has been deleted");
         } catch (error) {

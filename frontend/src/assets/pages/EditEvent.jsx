@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-const API = import.meta.env.VITE_API_URL;
+
 
 export function EditEvent() {
     const {id} = useParams();
@@ -44,7 +44,7 @@ export function EditEvent() {
         useEffect(() => {
         const fetchSingleEvent = async () => {
             try {
-                const res = await axios.get(`${API}/api/getevent/${id}`)
+                const res = await axios.get(`/api/getevent/${id}`)
                 const result = res.data.values[0];                
                 setFormData({
                     event_name:result.name,
@@ -84,7 +84,7 @@ export function EditEvent() {
         setMessage(null);
 
         try {
-            const res = await axios.put(`${API}/api/updateevent/${id}`, formData);
+            const res = await axios.put(`/api/updateevent/${id}`, formData);
             alert("Event updated successfully")
             setIsSubmitting(false);
         } catch (error) {

@@ -11,6 +11,7 @@ import { AuthProvider } from "./assets/components/AuthContext.jsx";
 import axios from "axios";
 import { ProtectedRoute } from "./assets/components/ProtectedRoute.jsx";
 axios.defaults.withCredentials = true;
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 function App() {
   return (
     <AuthProvider>

@@ -4,7 +4,6 @@ import { Calendar, CheckCircle, CircleX, Clock, FileText, IndianRupee, Plus, Use
 import axios from "axios";
 import { useAuth } from "../components/AuthContext";
 import { Link, useActionData, useNavigate } from "react-router-dom";
-const API = import.meta.env.VITE_API_URL;
 
 // const auth = useAuth();
 // console.log(auth.role);
@@ -51,7 +50,7 @@ export function Dashboard() {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const res = await axios.get(`${API}/api/events`,{
+                const res = await axios.get(`/api/events`,{
                     withCredentials:true
                 });
                 setEvents(Array.isArray(res.data) ? res.data : []);

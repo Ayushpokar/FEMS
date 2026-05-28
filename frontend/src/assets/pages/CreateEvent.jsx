@@ -3,7 +3,6 @@ import Navbar from '../components/Navbar';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const API = import.meta.env.VITE_API_URL;
 export function CreateEventForm() {
     
     const navigate = useNavigate();
@@ -60,7 +59,7 @@ export function CreateEventForm() {
         setMessage(null);
 
         try {
-            const res = await axios.post(`${API}/api/createevent`, formData);
+            const res = await axios.post(`/api/createevent`, formData);
             console.log('Success:', res.data);
             alert("Event Created");
             navigate('/events');

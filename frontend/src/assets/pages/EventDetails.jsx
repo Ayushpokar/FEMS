@@ -4,7 +4,6 @@ import { ArrowLeft, CheckCircle, AlertCircle, XCircle, Users, UsersRound, User, 
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../components/AuthContext';
-const API = import.meta.env.VITE_API_URL;
 
 export function EventCard({ title, value, icon: Icon, iconColor }) {
     return (
@@ -37,7 +36,7 @@ export function EventDetails() {
     useEffect(() => {
         const fetchSingleEvent = async () => {
             try {
-                const res = await axios.get(`${API}/api/getevent/${id}`)
+                const res = await axios.get(`/api/getevent/${id}`)
                 // const result = res.data;                
                 setEventData(res.data.values[0])
                 setIsLoading(false);

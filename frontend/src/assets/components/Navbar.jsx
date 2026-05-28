@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-const API = import.meta.env.VITE_API_URL;
 export default function Navbar() {
     const navigate = useNavigate();
 

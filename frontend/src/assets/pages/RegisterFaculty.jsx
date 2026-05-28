@@ -3,8 +3,6 @@ import Navbar from "../components/Navbar";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
-const API = import.meta.env.VITE_API_URL;
-console.log(API);
 
 export function RegisterFaculty() {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,7 +29,7 @@ export function RegisterFaculty() {
         try {
             console.log("adsasa");
             
-            const res = await axios.post(`${API}/api/faculty/register`, formData);
+            const res = await axios.post(`/api/faculty/register`, formData);
             alert("Faculty Registered");
             setFormData({
                 user_name: '',

@@ -2,14 +2,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-const API = import.meta.env.VITE_API_URL;
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [ loading, setLoading] = useState(true);
   useEffect(() => {
-        axios.get(`${API}/api/me`, { withCredentials: true })
+        axios.get(`/api/me`, { withCredentials: true })
             .then(res => setUser(res.data))
             .catch(() => setUser(null))
             .finally(() => setLoading(false));
@@ -29,7 +28,7 @@ export function AuthProvider({ children }) {
     }
   const logout = async () => {
     try {
-      await axios.post(`${API}/api/logout`,{});
+      await axios.post(`/api/logout`,{});
       setUser(null)
     } catch (error) {
       console.log(error)

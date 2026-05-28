@@ -5,7 +5,6 @@ import axios from "axios";
 import Navbar from "../components/Navbar";
 import { useAuth } from "../components/AuthContext";
 
-const API = import.meta.env.VITE_API_URL;
 
 export function Login() {
     const { login } = useAuth();
@@ -26,7 +25,7 @@ export function Login() {
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post(`${API}/api/login`, formData ,{
+            const res = await axios.post(`/api/login`, formData ,{
                 withCredentials: true
             });
             const result = res.data.user;

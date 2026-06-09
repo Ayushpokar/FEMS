@@ -35,16 +35,21 @@ export function GenerateReport() {
         setFormData(prev => ({
             ...prev,
             outcomes: ''
-        })); try {
+        })); 
+        try {
             const res = await axios.get(`/api/reports/ai-draft/${event_id}`);
             setFormData(prev => ({
                 ...prev,
                 outcomes: res.data.draft
             }));
-            setIsGeneratingAI(false);
         } catch (error) {
             console.log(error);
-
+            if (error.response.status === 500 || error.response.status === 503) {
+                return alert(error.response.data.error);
+            }
+            alert("Something went wrong");  
+        }finally{
+            setIsGeneratingAI(false);
         }
     }
 

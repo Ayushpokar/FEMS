@@ -50,6 +50,7 @@ export function EventDetails() {
         pending: <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded-md text-[11px] font-bold">PENDING</span>,
         modification_required: <span className="px-2 py-0.5 bg-orange-100 text-orange-700 rounded-md text-[11px] font-bold">MODIFICATION</span>,
     };
+
     useEffect(() => {
         const fetchSingleEvent = async () => {
             try {
@@ -63,8 +64,7 @@ export function EventDetails() {
             }
         };
         fetchSingleEvent();
-    }, [id])
-    console.log(eventData);
+    }, [id]);
 
     if (isLoading) return <div className="p-10 text-center text-gray-500">Loading event details...</div>;
     if (error) return <div className="p-10 text-center text-red-500">{error}</div>;
@@ -86,6 +86,7 @@ export function EventDetails() {
         } catch (error) {
             console.error("Error updating status:", error);
             alert("Failed to update status. Please check the console.");
+            
         }
     };
     return (
@@ -121,7 +122,6 @@ export function EventDetails() {
                         iconColor="text-orange-500"
                     /></Link>)}
                 </div>
-
             )}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

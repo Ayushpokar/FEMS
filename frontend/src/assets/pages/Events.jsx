@@ -44,7 +44,7 @@ export function EventCard({ eventData, onDelete }) {
                     <p className="text-gray-400 text-sm mt-1">
                         {role === 'hod' && (<>{eventData.user_name}<span className='mx-1'>•</span></>)}{formatLocalTime(eventData?.start_date)} <span className="mx-1">•</span> {eventData.venue}
                     </p>
-                    {role=== 'faculty' && eventData.status === 'modification_required' && (
+                    {role === 'faculty' && eventData.status === 'modification_required' && (
                         <div className="border border-red-300 bg-red-50 p-3 rounded-md w-5xl">
                             <label htmlFor="" className="text-red-900">Comment From HOD:</label>
                             <p className="text-red-700">{eventData.comment}</p>
@@ -58,10 +58,10 @@ export function EventCard({ eventData, onDelete }) {
                         <Eye size={16} className="mr-2" /> View
                     </Link>
 
-                    {role === 'faculty' && (<><Link to={`/edit/event/${eventData.event_id}`} className="flex items-center justify-center px-4 py-1.5 border border-gray-300 rounded-md text-gray-700 bg-white text-sm font-medium">
-                        <EditIcon size={16} className="mr-2" /> Edit
-                    </Link></>)}
                     {role === 'faculty' && eventData.status !== 'approved' && eventData.status !== 'rejected' && (<>
+                        <Link to={`/edit/event/${eventData.event_id}`} className="flex items-center justify-center px-4 py-1.5 border border-gray-300 rounded-md text-gray-700 bg-white text-sm font-medium">
+                            <EditIcon size={16} className="mr-2" /> Edit
+                        </Link>
                         <button onClick={() => onDelete(eventData.event_id)} className="flex items-center justify-center px-4 py-1.5 border border-gray-300 rounded-md text-white bg-red-600 text-sm font-medium">
                             <Trash2 size={16} className="mr-2" /> Delete Event
                         </button></>)}
@@ -70,7 +70,7 @@ export function EventCard({ eventData, onDelete }) {
         </div>
     );
 }
-  
+
 
 export function Events() {
     const { role } = useAuth();
@@ -79,23 +79,22 @@ export function Events() {
     const [error, setError] = useState(null);
     const [activeTab, setActiveTab] = useState('All');
     const fetchEvents = async () => {
-            try {
-                const res = await axios.get(`/api/events`);
-                setEvents(res.data); 
-                
-            } catch (err) {
-                console.error("Failed to fetch events:", err);
-                setError("Could not load events.");
-            } finally {
-                setIsLoading(false); 
-            }
-        };
+        try {
+            const res = await axios.get(`/api/events`);
+            setEvents(res.data);
+        } catch (err) {
+            console.error("Failed to fetch events:", err);
+            setError("Could not load events.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
         fetchEvents();
     }, []);
 
-      const Deleteevent = async (event_id) => {
+    const Deleteevent = async (event_id) => {
         const isConfirmed = window.confirm("Do you want delete this event?");
         if (!isConfirmed) return;
 
@@ -107,8 +106,6 @@ export function Events() {
             console.log("Something went wrong while deleteing the event.")
         }
     }
-
-    console.log(events);
 
     if (isLoading) {
         return (

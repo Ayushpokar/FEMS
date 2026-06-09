@@ -1,12 +1,9 @@
 # Node
 node_modules/
-
+reports/
 # Production
 dist/
 build/
-
-# Security
-.env
 
 # Puppeteer / Cache
 .cache/

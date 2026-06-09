@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Group</title>
+</head>
+<body>
+    <pre>
+        <form action="">
+            Volunteer Group: <input type="text" name="" id="group_name">
+            Select Volunteer: <select name="" id="register_number"><option value="NA">NO member</option></select>
+            <input type="button" value="Create Group" onclick="creategroup();">
+        </form>
+
+    </pre>
+    <script>
+        async function getvolunteer() {
+            const res = await fetch('/getvolunteer',{
+                method:'GET'
+            })
+            const data = await res.json();
+            data.forEach(volunteer => {
+                document.getElementById('register_number').innerHTML+= `<option value=${volunteer.register_number}>${volunteer.name}(${volunteer.register_number})</option>`
+            });
+        }
+        getvolunteer();
+        async function creategroup() {
+            const payload = {
+                "name":document.getElementById('group_name').value,
+                "register_number":document.getElementById('register_number').value
+            }
+            const res= await fetch('/creategroup',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify(payload)
+            })
+            const responce = await res.json();
+            console.log(responce);
+        }
+    </script>
+</body>
+</html>

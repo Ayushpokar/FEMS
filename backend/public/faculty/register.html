@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Register</title>
+</head>
+<body>
+    <pre>
+    <h3>Register Faculty</h3>
+    <form method="post">
+        Faculty Name: <input type="text" id="name">
+        Faculty Role: <select id="role"><option value="faculty">Faculty</option></select>
+        Faculty Email: <input type="email" name="" id="email">
+        Faculty Mobile: <input type="text" id="mobile">
+        Faculty Department: <input type="text" id="department">
+        Faculty Password: <input type="password" name="" id="password">
+        <input type="button" value="Register" onclick="registerFaculty();">
+    </form>
+    </pre>
+
+
+    <script>
+        async function registerFaculty(){
+
+            // const data = {
+            //     "user_name": document.getElementById('name').value,
+            //     "user_role": document.getElementById('role').value,
+            //     "user_email": document.getElementById('email').value,
+            //     "user_mobile": document.getElementById('mobile').value,
+            //     "user_department": document.getElementById('department').value,
+            //     "user_password": document.getElementById('password').value
+            // }
+
+            const data = {}
+            data['user_name']= document.getElementById('name').value;
+            data['user_role']= document.getElementById('role').value;
+            data['user_email']=document.getElementById('email').value;
+            data['user_mobile']= document.getElementById('mobile').value;
+            data['user_department'] = document.getElementById('department').value;
+            data['user_password']= document.getElementById('password').value;
+            
+            const res = await fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            console.log(data);
+            const result = await res.json();
+            console.log(result);
+
+        }
+    </script>
+</body>
+</html>

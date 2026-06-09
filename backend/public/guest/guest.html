@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guest Entry</title>
+</head>
+<body>
+    <h3>REgister Guest</h3>
+    <pre>
+    <form action="post">
+        Guest Name: <input type="text" id="name">
+        Guest Email: <input type="email" id="email">
+        Guest Mobile: <input type="text" name="" id="mobile">
+        Guest Company: <input type="text" name="" id="company">
+        Guest Designation: <input type="text" name="" id="designation">   
+        <input type="button" value="Submit" onclick="createguest();">
+    </form>
+    </pre>
+    <script>
+        async function createguest() {  
+            const payload = {
+                "guest_name": document.getElementById('name').value,
+                "guest_email": document.getElementById('email').value,
+                "guest_mobile": document.getElementById('mobile').value,
+                "guest_company": document.getElementById('company').value,
+                "guest_designation": document.getElementById('designation').value
+            }
+
+            const res = await fetch('/guest',{
+                method: 'POST',
+                headers:{'Content-Type':'application/json'},
+                body: JSON.stringify(payload)
+            });
+            const result = await res.json();
+        }
+    </script>
+</body>
+</html>

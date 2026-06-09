@@ -1,0 +1,17 @@
+# Node
+node_modules/
+
+# Production
+dist/
+build/
+
+# Security
+.env
+
+# Puppeteer / Cache
+.cache/
+backend/.cache/
+
+# Misc
+.DS_Store
+EOT

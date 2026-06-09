@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Event</title>
+</head>
+<body>
+    <pre>
+        <form action="" method="post">
+            Event name: <input type="text" name="" id="name">
+            Event Descrption: <input type="text" name="" id="descrp">
+            Event Venue: <input type="text" name="" id="venue">
+            Event category: <input type="text" name="" id="category">
+            Event Mode: Online<input type="radio" name="mode" id="mode" value="online"> Offline<input type="radio" name="mode" id="mode" value="offline">
+            Event registration fee: <input type="number" name="" id="fee">
+            Event Start Time: <input type="datetime-local" name="" id="starttime">
+            Event End Time: <input type="datetime-local" name="" id="endtime">
+            Event Total Cost: <input type="number" name="" id="totalcost">
+            Audience Size: <input type="number" name="" id="size">
+            Select Guest: <select name="" id="guest"></select>    <button><a href="/create/createguest">Create New Guest</a></button>
+
+            Select Group: <select name="" id="group"></select>   <a href="/create/volunteergroup">Create Group</a>
+            <input type="button" value="createevent" onclick="createevent();">
+        </form>
+    </pre>
+
+    <script>
+        async function getdetails() {
+            const res = await fetch('/get_guest_details',{
+                method: 'GET'
+            });
+            const responce = await res.json();
+            console.log(responce);
+            responce.forEach(guest => {
+                document.getElementById('guest').innerHTML += `<option value=${guest.id}>${guest.name}</option>`;
+            });
+        }
+        async function getvolunteer_group() {
+            const res = await fetch('/getvolunteer_group',{
+                method:'GET'
+            });
+            const responce = await res.json();
+            responce.forEach(group => {
+                document.getElementById('group').innerHTML += `<option value=${group.id}>${group.name}</option>`;
+            });
+        }
+        getvolunteer_group();
+        getdetails();
+
+        async function createevent() {
+            const payload= {
+                    "event_name": document.getElementById('name').value,
+                    "event_descrption": document.getElementById('descrp').value,
+                    "event_venue":document.getElementById('venue').value,
+                    "event_category":document.getElementById('category').value,
+                    "event_mode":document.querySelector('input[name="mode"]:checked').value,
+                    "event_fee":document.getElementById('fee').value,
+                    "event_start_time":document.getElementById('starttime').value,
+                    "event_end_time": document.getElementById('endtime').value,
+                    "total_cost": document.getElementById('totalcost').value,
+                    "audience_size": document.getElementById('size').value,
+                    "guest_id":document.getElementById('guest').value,
+                    "group_id":document.getElementById('group').value
+            }
+
+            const res = await fetch('/createevent',{
+                method: 'POST',
+                headers:{'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            });
+            const responce = await res.json();
+            alert(responce.message);
+            window.location.href = '/events';
+        }
+    </script>
+</body>
+</html>

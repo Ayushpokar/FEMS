@@ -106,12 +106,12 @@ export const createevent = async (req, res) => {
             </body>
             </html>`
         }
-        // transporter.sendMail(sendingmail, (error, info) => {
-        //     if (error) {
-        //         return console.log(error);
-        //     }
-        //     return res.status(201).json({ status: "success", message: "Event is Created" })
-        // })
+        transporter.sendMail(sendingmail, (error, info) => {
+            if (error) {
+                return console.log(error);
+            }
+            return res.status(201).json({ status: "success", message: "Event is Created" })
+        })
         res.status(201).json({ status: "success", message: "Event is Created" });
     } catch (error) {
         console.log(error)

@@ -7,6 +7,7 @@ import puppeteer from 'puppeteer';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from "url";
+import { log } from "console";
 const now = new Date();
 const URL = process.env.VITE_FRONTEND_URL;
 
@@ -56,7 +57,8 @@ export const createevent = async (req, res) => {
             payload.group_id || null
         ]
         const result3 = await pool.query(query3, values3);
-        const guest_name = await pool.query("SELECT name FROM fems.tbl_guest WHERE id=$1", [2]);
+        const guest_name = await pool.query("SELECT name FROM fems.tbl_guest WHERE id=$1", [payload.user_id]);
+        
         const sendingmail = {
             from: "pokarayushr@gmail.com",
             to: "maniparpatel@gmail.com",
@@ -76,7 +78,7 @@ export const createevent = async (req, res) => {
 
             <table style="width: 100%;max-width: 600px;border-collapse: collapse;">
                 <tr><th style="border: 1px solid #ffffff;padding: 8px;text-align: left;background-color: #96D4D4;width: 30%;">Event Created By</th>
-                    <td style="border: 1px solid #ffffff;padding: 8px;text-align: left;background-color: #96D4D4;">Faculty Ma'am</td></tr>
+                    <td style="border: 1px solid #ffffff;padding: 8px;text-align: left;background-color: #96D4D4;">${guest_name.rows[0].name}</td></tr>
                 <tr><th style="border: 1px solid #ffffff;padding: 8px;text-align: left;background-color: #96D4D4;width: 30%;">Event Name</th>
                     <td style="border: 1px solid #ffffff;padding: 8px;text-align: left;background-color: #96D4D4;">${payload.event_name}</td></tr>
                 <tr><th style="border: 1px solid #ffffff;padding: 8px;text-align: left;background-color: #96D4D4;width: 30%;">Event Description</th>
@@ -109,7 +111,7 @@ export const createevent = async (req, res) => {
         transporter.sendMail(sendingmail, (error, info) => {
             if (error) {
                 return console.log(error);
-            }
+            }            
             return res.status(201).json({ status: "success", message: "Event is Created" })
         })
         res.status(201).json({ status: "success", message: "Event is Created" });

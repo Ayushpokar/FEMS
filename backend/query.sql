@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS fems.tbl_users(
 
 CREATE TABLE IF NOT EXISTS fems.tbl_events(
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50),
+    name VARCHAR(255),
     descrp TEXT,
     venue VARCHAR(100),
     category VARCHAR(50),

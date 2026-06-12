@@ -8,6 +8,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from "url";
 const now = new Date();
+const URL = process.env.VITE_FRONTEND_URL;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,8 +16,8 @@ const __dirname = path.dirname(__filename);
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: "pokar.ayush2024e@vitstudent.ac.in",
-        pass: "fbgl dmal qpyt vmro"
+        user: "pokarayushr@gmail.com",
+        pass: "vucu dafc dwll kltp"
     }
 });
 
@@ -57,7 +58,7 @@ export const createevent = async (req, res) => {
         const result3 = await pool.query(query3, values3);
         const guest_name = await pool.query("SELECT name FROM fems.tbl_guest WHERE id=$1", [2]);
         const sendingmail = {
-            from: "pokar.ayush2024e@vitstudent.ac.in",
+            from: "pokarayushr@gmail.com",
             to: "maniparpatel@gmail.com",
             subject: "New Event Created",
             text: '',
@@ -99,23 +100,18 @@ export const createevent = async (req, res) => {
                 </table>    
             <br>
             <p>
-            <a href="http://localhost:7000/updatestatus/${id}/approved" style="margin-right: 10px; text-decoration: none;  padding: 6px 10px;  background-color: #007BFF;
-            color: white;   border-radius: 4px;  font-size: 14px;">Approve</a>
-            <a href="http://localhost:7000/updatestatus/${id}/rejected" style="margin-right: 10px; background-color: #dc3545;text-decoration: none;  padding: 6px 10px;
-            color: white;   border-radius: 4px;  font-size: 14px;">Reject</a>
-            <a href="http://localhost:7000/event/edit?id=${id}" style="background-color: #ffc107; color: black; text-decoration: none;  padding: 6px 10px;
-            color: white;   border-radius: 4px;  font-size: 14px;">Request Modification</a>
+            <a href="${URL}/event/${id}" style="margin-right: 10px; text-decoration: none;  padding: 6px 10px;  background-color: #007BFF;
+            color: white;   border-radius: 4px;  font-size: 14px;">View Event</a>
             </p>
-
             </body>
             </html>`
         }
-        transporter.sendMail(sendingmail, (error, info) => {
-            if (error) {
-                return console.log(error);
-            }
-            return res.status(201).json({ status: "success", message: "Event is Created" })
-        })
+        // transporter.sendMail(sendingmail, (error, info) => {
+        //     if (error) {
+        //         return console.log(error);
+        //     }
+        //     return res.status(201).json({ status: "success", message: "Event is Created" })
+        // })
         res.status(201).json({ status: "success", message: "Event is Created" });
     } catch (error) {
         console.log(error)

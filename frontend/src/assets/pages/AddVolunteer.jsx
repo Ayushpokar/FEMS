@@ -25,7 +25,6 @@ export function AddVolunteer() {
         e.preventDefault(); 
         setIsSubmitting(true);
         setMessage(null);
-
         try {
             console.log("adsasa");
             
@@ -53,12 +52,9 @@ export function AddVolunteer() {
                 <h2 className="text-2xl font-bold text-gray-900">Add Volunteer </h2>
                 <p className="text-gray-500 mt-1">Add Voluunteer to create group</p>
             </div>
-
             <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm max-w-2xl">
                 <h3 className="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Add Volunteer</h3>
-
                 <form className="grid grid-cols-1 gap-5" onSubmit={handleSubmit}>
-
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Student Name</label>
                         <input

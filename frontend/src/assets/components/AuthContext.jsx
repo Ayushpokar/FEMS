@@ -7,21 +7,21 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [ loading, setLoading] = useState(true);
-  useEffect(() => {
-    // console.log("API URL:", API); // ✅ check URL
-    
+  const navigate = useNavigate();
+  useEffect(() => {    
     axios.get(`/api/me`)
         .then(res => {
             setUser(res.data);
         })
         .catch((err) => {
-            console.log("me error:", err.response?.status, err.message); // ✅ check error
+            console.log("me error:", err.response?.status, err.message);
             setUser(null);
+            navigate('/login');
         })
         .finally(() => setLoading(false));
 }, []);
 
-  // document.cookie
+  document.cookie
   const login = (userData) => {
     setUser(userData);
   };
